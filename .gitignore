@@ -1,0 +1,15 @@
+# This repo publishes a static site (GitHub Pages): index.html + fitness-daily.html + assets/ only.
+# Everything below is local tooling / heavy / private — never publish.
+venv/
+__pycache__/
+*.pyc
+*.db
+audio/
+transcripts/
+.ai-canvas/
+.claude/
+.DS_Store
+manifest*.json
+download_failures.txt
+*.py
+*.sh

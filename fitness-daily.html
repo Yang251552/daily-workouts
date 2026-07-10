@@ -1,0 +1,904 @@
+<meta charset="utf-8">
+<link rel="preload" href="assets/fonts/ZCOOLKuaiLe-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<title>今日 · 周六 身体唤醒</title>
+<style>
+  @font-face {
+    font-family: "Cloud Cute";
+    src: url("assets/fonts/ZCOOLKuaiLe-Regular.ttf") format("truetype");
+    font-display: block;
+  }
+
+  :root {
+    --bg: #faf3ea;
+    --card: #ffffff;
+    --card-2: #fdf8f1;
+    --ink: #1e2f4d;
+    --dim: #8a8fa0;
+    --line: #eee2d3;
+    --accent: #e8623d;
+    --accent-ink: #ffffff;
+    --accent-soft: #fdeee7;
+    --good: #2fa47c;
+    --good-soft: #e0f4ec;
+    --tip-bg: #fff6dd;
+    --tip-line: #f2dda2;
+    --ring-track: #f3e6d7;
+    --shadow: 0 1px 2px rgba(30,47,77,.05), 0 8px 24px rgba(30,47,77,.07);
+    --fig-shadow: rgba(30,47,77,.08);
+    --font-hand: "Cloud Cute", "Kaiti SC", "STKaiti", "KaiTi", "Chalkboard SE", cursive;
+    --font-hand-display: "Cloud Cute", "Kaiti SC", "STKaiti", "KaiTi", "Chalkboard SE", cursive;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14181f; --card: #1e242e; --card-2: #232a36;
+      --ink: #edf0f6; --dim: #8f99ac; --line: #303948;
+      --accent: #f07a52; --accent-ink: #1c1109; --accent-soft: #38271f;
+      --good: #46bd92; --good-soft: #1d352c;
+      --tip-bg: #33301f; --tip-line: #4d4526;
+      --ring-track: #2c3441;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.32);
+      --fig-shadow: rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #faf3ea; --card: #ffffff; --card-2: #fdf8f1;
+    --ink: #1e2f4d; --dim: #8a8fa0; --line: #eee2d3;
+    --accent: #e8623d; --accent-ink: #ffffff; --accent-soft: #fdeee7;
+    --good: #2fa47c; --good-soft: #e0f4ec;
+    --tip-bg: #fff6dd; --tip-line: #f2dda2;
+    --ring-track: #f3e6d7;
+    --shadow: 0 1px 2px rgba(30,47,77,.05), 0 8px 24px rgba(30,47,77,.07);
+    --fig-shadow: rgba(30,47,77,.08);
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg: #14181f; --card: #1e242e; --card-2: #232a36;
+    --ink: #edf0f6; --dim: #8f99ac; --line: #303948;
+    --accent: #f07a52; --accent-ink: #1c1109; --accent-soft: #38271f;
+    --good: #46bd92; --good-soft: #1d352c;
+    --tip-bg: #33301f; --tip-line: #4d4526;
+    --ring-track: #2c3441;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.32);
+    --fig-shadow: rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-hand);
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  .num { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-variant-numeric: tabular-nums; }
+  button { font: inherit; color: inherit; }
+
+  .app { max-width: 1120px; margin: 0 auto; padding: 22px 20px 40px; }
+
+  /* ---------- top bar ---------- */
+  .top {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: 14px 18px; box-shadow: var(--shadow); margin-bottom: 18px;
+  }
+  .logo {
+    width: 44px; height: 44px; flex: none; border-radius: 12px;
+    background: var(--accent); color: var(--accent-ink);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo svg { width: 26px; height: 26px; fill: currentColor; }
+  .top-title { min-width: 0; }
+  .top-title .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; color: var(--dim); }
+  .top-title h1 { margin: 2px 0 0; font-size: 20px; font-weight: 850; letter-spacing: .01em; text-wrap: balance; }
+  .top-prog { margin-left: auto; display: flex; align-items: center; gap: 12px; flex: none; }
+  .top-prog .count { font-size: 17px; font-weight: 800; }
+  .top-prog .count small { color: var(--dim); font-weight: 700; }
+  .bar { width: 150px; height: 8px; border-radius: 999px; background: var(--ring-track); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--accent); transition: width .35s ease; }
+
+  /* ---------- 3-column layout ---------- */
+  .layout { display: grid; grid-template-columns: 296px minmax(0,1fr) 260px; gap: 16px; align-items: start; }
+
+  /* ---------- queue ---------- */
+  .queue { display: flex; flex-direction: column; gap: 10px; }
+  .q-item {
+    display: grid; grid-template-columns: 30px minmax(0,1fr) 74px; align-items: center; gap: 10px;
+    width: 100%; text-align: left; cursor: pointer;
+    background: var(--card); border: 2px solid var(--line); border-radius: 14px;
+    padding: 10px 12px; box-shadow: var(--shadow);
+    transition: transform .12s ease, border-color .12s ease;
+  }
+  .q-item:hover { transform: translateY(-1px); }
+  .q-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .q-item.current { border-color: var(--accent); background: var(--card); position: relative; }
+  .q-item.current::after {
+    content: ""; position: absolute; right: -9px; top: 50%; margin-top: -7px;
+    border: 7px solid transparent; border-left-color: var(--accent);
+  }
+  .q-mark {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800;
+    background: var(--card-2); color: var(--dim); border: 2px solid var(--line);
+  }
+  .q-item.current .q-mark { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .q-item.done .q-mark { background: var(--good); border-color: var(--good); color: #fff; }
+  .q-name { font-size: 14.5px; font-weight: 800; line-height: 1.25; }
+  .q-name small { display: block; font-size: 11px; color: var(--dim); font-weight: 600; margin-top: 2px; }
+  .q-item.done .q-name { color: var(--dim); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+  .q-fig { width: 74px; height: 52px; }
+  .q-fig svg { width: 100%; height: 100%; }
+
+  /* ---------- center stage ---------- */
+  .stage {
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    box-shadow: var(--shadow); padding: 24px 26px 22px;
+    display: flex; flex-direction: column; gap: 14px; min-height: 480px;
+  }
+  .ex-head h2 { margin: 0; font-size: 34px; font-weight: 900; letter-spacing: .01em; }
+  .ex-head .rx { margin-top: 5px; font-size: 14.5px; font-weight: 700; color: var(--dim); }
+  .ex-head .rx b { color: var(--accent); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--good-soft); color: var(--good);
+    font-size: 12.5px; font-weight: 800; padding: 6px 12px; border-radius: 999px;
+  }
+  .tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .fig-box { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4px 0; }
+  .fig-box svg { width: min(440px, 100%); height: auto; }
+
+  .done-btn {
+    border: 0; border-radius: 14px; padding: 15px 18px; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink);
+    font-size: 16.5px; font-weight: 850; letter-spacing: .02em;
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: transform .1s ease, filter .12s ease;
+  }
+  .done-btn:hover { filter: brightness(1.05); }
+  .done-btn:active { transform: scale(.985); }
+  .done-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .done-btn.resting { background: var(--card-2); color: var(--accent); border: 2px dashed var(--accent); box-shadow: none; }
+
+  .skip-btn {
+    border: 2px dashed var(--line); border-radius: 14px; padding: 12px 18px; cursor: pointer;
+    background: transparent; color: var(--dim);
+    font-size: 14px; font-weight: 750; letter-spacing: .02em;
+    transition: border-color .12s ease, color .12s ease;
+  }
+  .skip-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .skip-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .tut {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card-2); border: 1px solid var(--line); border-radius: 14px;
+    padding: 10px 14px; text-decoration: none; color: var(--ink);
+  }
+  .tut:hover { border-color: var(--accent); }
+  .tut .play {
+    width: 34px; height: 34px; flex: none; border-radius: 50%;
+    background: var(--accent); color: var(--accent-ink);
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+  }
+  .tut .t-label { font-size: 11px; font-weight: 800; letter-spacing: .1em; color: var(--dim); }
+  .tut .t-title { font-size: 13.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tut .t-text { min-width: 0; }
+  .tut .ext { margin-left: auto; color: var(--dim); flex: none; }
+
+  /* ---------- rest rail ---------- */
+  .rest {
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    box-shadow: var(--shadow); padding: 20px 18px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .rest-head { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 850; color: var(--accent); letter-spacing: .06em; }
+  .ring-wrap { position: relative; width: 176px; height: 176px; }
+  .ring-wrap svg { width: 100%; height: 100%; }
+  .ring-track { fill: none; stroke: var(--ring-track); stroke-width: 11; }
+  .ring-ticks { fill: none; stroke: var(--line); stroke-width: 5; }
+  .ring-prog {
+    fill: none; stroke: var(--accent); stroke-width: 11; stroke-linecap: round;
+    transition: stroke-dashoffset .25s linear;
+  }
+  .ring-center {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+  }
+  .clock { font-size: 36px; font-weight: 850; }
+  .clock-sub { font-size: 11px; font-weight: 700; color: var(--dim); letter-spacing: .12em; }
+  .tip {
+    display: flex; gap: 9px; align-items: flex-start;
+    max-width: 100%; min-width: 0;
+    background: var(--tip-bg); border: 1px solid var(--tip-line); border-radius: 12px;
+    padding: 11px 12px; font-size: 12.5px; line-height: 1.6; font-weight: 600;
+  }
+  .tip .ico { flex: none; }
+
+  .note {
+    margin-top: 18px; padding: 12px 6px 0; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--dim); line-height: 1.7; text-align: center;
+  }
+
+  /* ---------- figures ---------- */
+  .sk  { stroke: #efb48e; stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+  .sk2 { stroke: #d99a72; stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+  .hd { fill: #efb48e; }
+  .hair { fill: #2d3038; }
+  .tank { fill: #2e9d8f; }
+  .shorts { fill: #22364f; }
+  .shoe { fill: #1f6b7a; }
+  .db-p { fill: #2b3950; }
+  .db-b { fill: #55617a; }
+  .gshadow { fill: var(--fig-shadow); }
+
+  .pop { animation: pop .45s ease; }
+  @keyframes pop { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+  .finish-art { display: block; width: clamp(180px, 17vw, 250px); height: auto; margin: 0 auto 10px; }
+  .celebrate-msg { text-align: center; font-size: clamp(28px, 2.4vw, 40px); font-weight: 850; line-height: 1.2; }
+  .celebrate-sub { margin-top: 8px; text-align: center; font-size: clamp(17px, 1.35vw, 22px); color: var(--dim); font-weight: 600; line-height: 1.45; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring-prog, .bar i, .q-item, .done-btn { transition: none; }
+    .pop { animation: none; }
+  }
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    .q-item.current::after { display: none; }
+    .rest { order: -1; }
+    .stage { min-height: 0; }
+    .top { flex-wrap: wrap; }
+    .top-prog { margin-left: 58px; }
+  }
+
+  /* Screenshot-inspired visual layer. Interaction and DOM state stay unchanged. */
+  :root:not([data-theme]), :root[data-theme="light"] {
+    --bg: #fcfaf6; --card: #fffefd; --card-2: #f6fbf9;
+    --ink: #102849; --dim: #738096; --line: #eee3d7;
+    --accent: #ff694d; --accent-soft: #fff0eb;
+    --good: #3ba99d; --good-soft: #e7f3f0;
+    --tip-bg: #fff5df; --tip-line: #ffd37d; --ring-track: #fde1d5;
+    --shadow: 0 1px 2px rgba(16,40,73,.03), 0 14px 34px rgba(16,40,73,.06);
+    --fig-shadow: rgba(16,40,73,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      --bg: #14181f; --card: #1e242e; --card-2: #232a36;
+      --ink: #edf0f6; --dim: #8f99ac; --line: #303948;
+      --accent: #f07a52; --accent-ink: #1c1109; --accent-soft: #38271f;
+      --good: #46bd92; --good-soft: #1d352c;
+      --tip-bg: #33301f; --tip-line: #4d4526; --ring-track: #2c3441;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.32);
+      --fig-shadow: rgba(0,0,0,.35);
+    }
+  }
+  body { font-family: var(--font-hand); }
+  .app { max-width: 1920px; min-height: 100vh; padding: 34px 40px 26px; }
+
+  .top { min-height: 92px; gap: 20px; margin-bottom: 24px; padding: 0; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+  .logo { width: 80px; height: 80px; border-radius: 21px; background: linear-gradient(135deg, #ff876b, var(--accent)); box-shadow: inset 0 1px 1px rgba(255,255,255,.35), 0 4px 10px rgba(255,105,77,.16); }
+  .logo svg { width: 43px; height: 43px; }
+  .top-title .eyebrow { display: none; }
+  .top-title h1, .q-name, .ex-head h2, .tut .t-label, .done-btn, .rest-head {
+    font-family: var(--font-hand-display);
+    letter-spacing: 0;
+  }
+  .top-title h1 { margin: 0; font-size: clamp(28px, 2.45vw, 46px); font-weight: 900; letter-spacing: .025em; }
+  .top-prog { min-width: min(32vw, 494px); height: 84px; margin-left: auto; padding: 0 28px; gap: 28px; background: rgba(255,255,255,.55); border: 2px solid var(--line); border-radius: 999px; }
+  .top-prog .count { font-size: 29px; font-weight: 900; letter-spacing: -.05em; }
+  .bar { flex: 1; min-width: 130px; width: auto; height: 17px; background: #ebdfd2; box-shadow: inset 0 1px 2px rgba(16,40,73,.06); }
+
+  .layout { grid-template-columns: minmax(360px, .45fr) minmax(0, 1fr); gap: 28px; align-items: stretch; }
+  .workout-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .48fr); min-width: 0; overflow: hidden; background: var(--card); border: 2px solid var(--line); border-radius: 34px; box-shadow: var(--shadow); }
+
+  .queue { position: relative; gap: 17px; padding: 32px 20px; background: #fffefd; border: 2px solid var(--line); border-radius: 34px; }
+  .queue::before { content: ""; position: absolute; z-index: 0; top: 84px; bottom: 86px; left: 61px; width: 2px; background: var(--line); }
+  .q-item { position: relative; z-index: 1; grid-template-columns: 58px minmax(0,1fr) 128px; gap: 14px; min-height: 132px; padding: 12px 14px; background: #fffefd; border: 2px solid #f0e6dc; border-radius: 23px; box-shadow: 0 1px 2px rgba(16,40,73,.025); }
+  .q-item.current { border-color: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent); }
+  .q-item.current::after { right: -28px; margin-top: -19px; border-width: 19px; border-left-color: var(--accent); }
+  .q-mark { width: 52px; height: 52px; border: 0; background: #f2eee8; color: var(--ink); font-size: 28px; font-weight: 900; letter-spacing: -.05em; }
+  .q-name { font-size: clamp(18px, 1.4vw, 28px); font-weight: 900; line-height: 1.12; letter-spacing: .025em; }
+  .q-name small { display: none; }
+  .q-fig { width: 128px; height: 96px; display: flex; align-items: center; justify-content: center; }
+  .q-fig img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+  .q-item.done .q-name { color: var(--ink); text-decoration: none; }
+  .q-item.done .q-fig { width: 80px; justify-self: start; }
+  .q-done { display: none; position: absolute; right: 20px; top: 50%; width: 48px; height: 48px; transform: translateY(-50%); border-radius: 50%; background: var(--good); color: #fff; place-items: center; font-size: 27px; font-weight: 900; line-height: 1; box-shadow: 0 2px 5px rgba(59,169,157,.18); }
+  .q-item.done .q-done { display: grid; }
+
+  .stage { min-width: 0; min-height: 480px; gap: 18px; padding: 54px 44px 32px; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+  .ex-head h2 { font-size: clamp(42px, 4.15vw, 76px); font-weight: 900; line-height: .98; letter-spacing: .028em; }
+  .ex-head .rx { margin-top: 22px; font-size: clamp(17px, 1.25vw, 25px); font-weight: 900; letter-spacing: .055em; color: var(--ink); }
+  .tags { gap: 14px; }
+  .tag {
+    min-height: 48px; gap: 8px; padding: 7px 15px 7px 8px; color: #3f9693;
+    border: 1px solid #d6e9e4; border-radius: 15px;
+    background: linear-gradient(145deg, #f0f8f6, #e1f1ed);
+    letter-spacing: .03em; box-shadow: 0 1px 2px rgba(39,112,108,.06), inset 0 1px 0 rgba(255,255,255,.88);
+    font-family: var(--font-hand-display);
+  }
+  .tag::before { display: none; }
+  .tag svg { width: 32px; height: 32px; flex: none; filter: drop-shadow(0 .4px 0 rgba(74,150,147,.22)); }
+  .tag:nth-child(odd) svg { transform: rotate(-.55deg); }
+  .tag:nth-child(even) svg { transform: rotate(.45deg); }
+  .tag span { line-height: 1; transform: translateY(.25px); }
+  .fig-box { min-height: 270px; padding: 8px 0 16px; border-bottom: 2px solid var(--line); }
+  .fig-box svg { width: min(620px, 100%); }
+  .fig-box .exercise-art {
+    display: block; width: min(720px, 100%); max-height: clamp(300px, 32vw, 500px);
+    object-fit: contain; mix-blend-mode: multiply;
+  }
+  .fig-box .fig-skin, .fig-box .fig-skin2, .fig-box .fig-shirt, .fig-box .fig-shirt2,
+  .fig-box .fig-shorts, .fig-box .fig-shoe, .fig-box .fig-hair, .fig-box .fig-dumbbell { stroke-width: 1.45px; }
+  .fig-box .fig-sole { stroke-width: 1.2px; }
+  .fig-box .fig-detail { stroke-width: 1.25px; }
+  .done-btn { border-radius: 15px; padding: 23px 24px; font-size: clamp(21px, 1.5vw, 30px); font-weight: 900; letter-spacing: .045em; box-shadow: 0 6px 12px color-mix(in srgb, var(--accent) 18%, transparent); }
+  .tut { min-height: 128px; padding: 15px 20px; background: rgba(255,255,255,.5); border: 2px solid var(--line); border-radius: 23px; }
+  .tut .play { width: 124px; height: 94px; border-radius: 16px; background: #a1c8c5; box-shadow: inset 0 0 0 1px rgba(16,40,73,.06); font-size: 24px; }
+  .tut .t-label { font-size: clamp(20px, 1.4vw, 29px); font-weight: 900; letter-spacing: .035em; color: var(--ink); }
+  .tut .t-title { margin-top: 8px; font-size: 13px; color: var(--dim); }
+
+  .rest { gap: 14px; padding: 112px 32px 32px; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+  .rest-head { gap: 10px; font-size: 30px; font-weight: 900; letter-spacing: .06em; }
+  .ring-wrap { width: min(100%, 350px); height: auto; aspect-ratio: 1; }
+  .ring-ticks { stroke: #f1d9ca; }
+  .clock { font-size: clamp(42px, 4.2vw, 76px); font-weight: 900; color: var(--ink); letter-spacing: -.08em; }
+  .clock-sub { font-size: 12px; font-weight: 800; }
+  .tip { border: 2px solid var(--tip-line); border-radius: 19px; padding: 17px 18px; font-size: 15px; line-height: 1.55; font-weight: 700; }
+  .note { margin-top: 22px; padding-top: 15px; }
+
+  /* Hand-drawn flat illustration system, matching the annotated reference. */
+  .fig-box svg, .q-fig svg { overflow: visible; }
+  .fig-skin, .fig-shirt, .fig-shorts, .fig-shoe, .fig-hair, .fig-dumbbell, .muscle-fill, .muscle-line {
+    stroke: #263449; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .fig-skin { fill: #f7d3b7; stroke-width: 2.2px; }
+  .fig-skin2 { fill: #e6bd99; stroke: #263449; stroke-width: 2.2px; stroke-linecap: round; stroke-linejoin: round; }
+  .fig-shirt { fill: #3b9e99; stroke-width: 2.2px; }
+  .fig-shirt2 { fill: #338b86; stroke: #263449; stroke-width: 2.2px; stroke-linecap: round; stroke-linejoin: round; }
+  .fig-sole { fill: #ffffff; stroke: #263449; stroke-width: 1.8px; stroke-linejoin: round; }
+  .fig-shorts { fill: #263449; stroke-width: 2.2px; }
+  .fig-shoe { fill: #3c8f96; stroke-width: 2.2px; }
+  .fig-hair { fill: #292b31; stroke-width: 2px; }
+  .fig-dumbbell { fill: #536176; stroke-width: 2px; }
+  .fig-detail { fill: none; stroke: #263449; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
+  .muscle-line { fill: none; stroke: #4d9695; stroke-width: 1.55px; opacity: .92; }
+  .muscle-fill { fill: rgba(181,223,217,.42); stroke: #4d9695; stroke-width: 1.35px; opacity: .9; }
+
+  @media (max-width: 1300px) {
+    .app { padding: 26px 24px; }
+    .layout { grid-template-columns: minmax(320px, .4fr) minmax(0, 1fr); gap: 20px; }
+    .workout-card { grid-template-columns: minmax(0, 1fr) minmax(270px, .44fr); }
+    .q-item { grid-template-columns: 52px minmax(0,1fr) 100px; min-height: 114px; }
+    .q-fig { width: 100px; height: 78px; }
+    .queue::before { left: 58px; }
+    .stage { padding: 42px 34px 28px; }
+    .rest { padding: 92px 24px 28px; }
+  }
+  @media (max-width: 960px) {
+    .app { padding: 18px 16px 24px; }
+    .top { min-height: 64px; margin-bottom: 18px; gap: 12px; flex-wrap: wrap; }
+    .logo { width: 58px; height: 58px; border-radius: 16px; }
+    .logo svg { width: 32px; height: 32px; }
+    .top-prog { order: 3; width: 100%; min-width: 0; height: 56px; margin-left: 0; padding: 0 18px; gap: 18px; }
+    .top-prog .count { font-size: 23px; }
+    .bar { height: 12px; }
+    .layout { grid-template-columns: 1fr; gap: 18px; }
+    .workout-card { grid-template-columns: 1fr; border-radius: 26px; }
+    .queue { order: 2; padding: 16px; border-radius: 26px; }
+    .queue::before, .q-item.current::after { display: none; }
+    .q-item { grid-template-columns: 48px minmax(0,1fr) 94px; min-height: 96px; border-radius: 19px; }
+    .q-fig { width: 94px; height: 72px; }
+    .rest { order: -1; padding: 30px 24px 24px; }
+    .ring-wrap { width: min(100%, 280px); }
+    .rest-head { font-size: 24px; }
+    .stage { min-height: 0; padding: 30px 24px 24px; }
+    .ex-head .rx { margin-top: 14px; }
+    .fig-box { min-height: 230px; }
+    .tut { min-height: 100px; }
+    .tut .play { width: 104px; height: 72px; }
+  }
+  @media (max-width: 560px) {
+    .top-title h1 { font-size: 23px; }
+    .q-name { font-size: 18px; }
+    .q-name small { font-size: 10px; }
+    .q-item { grid-template-columns: 44px minmax(0,1fr) 76px; gap: 8px; padding: 8px; }
+    .q-mark { width: 44px; height: 44px; font-size: 23px; }
+    .q-fig { width: 76px; height: 62px; }
+    .stage { padding: 28px 18px 18px; }
+    .tags { gap: 8px; }
+    .tag { padding: 8px 10px; font-size: 12px; }
+    .done-btn { padding: 18px 12px; }
+    .tut { padding: 12px; }
+    .tut .play { width: 82px; height: 60px; }
+  }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo-db" viewBox="0 0 24 24">
+      <rect x="2" y="9" width="3" height="6" rx="1"/>
+      <rect x="5.5" y="7" width="3" height="10" rx="1"/>
+      <rect x="15.5" y="7" width="3" height="10" rx="1"/>
+      <rect x="19" y="9" width="3" height="6" rx="1"/>
+      <rect x="8" y="10.5" width="8" height="3" rx="1"/>
+    </symbol>
+
+    <!-- Hand-drawn workout figures: rounded silhouettes, fine navy ink, teal kit and warm skin. -->
+    <symbol id="fig-squat" viewBox="0 0 220 170">
+      <ellipse class="gshadow" cx="110" cy="154" rx="62" ry="5"/>
+      <path class="fig-skin2" d="M93 104 C106 105 121 111 130 119 L115 131 C105 124 95 119 84 116 Z"/>
+      <path class="fig-skin2" d="M115 128 L128 119 C137 128 139 139 136 147 L124 147 C124 140 121 134 115 128 Z"/>
+      <path class="fig-shoe" d="M121 145 C130 144 141 146 144 150 C140 154 121 154 117 151 Z"/>
+      <path class="fig-sole" d="M118 151 L144 150 C145 153 142 155 121 155 C119 154 118 153 118 151 Z"/>
+      <path class="fig-shorts" d="M78 87 C91 85 105 89 113 99 L109 117 C99 121 86 116 77 108 L69 99 Z"/>
+      <path class="fig-skin" d="M93 108 C103 112 112 118 119 125 L104 139 L92 129 L78 117 Z"/>
+      <path class="fig-skin" d="M105 137 C112 138 118 142 118 147 C108 151 94 151 88 148 C89 143 96 139 105 137 Z"/>
+      <path class="fig-sole" d="M88 148 C100 151 111 151 118 147 C120 151 117 154 94 154 C90 153 88 151 88 148 Z"/>
+      <path class="fig-shirt" d="M82 91 C90 74 99 60 111 53 C124 54 133 63 135 77 L110 104 C100 101 91 97 82 91 Z"/>
+      <path class="fig-shirt2" d="M112 54 C121 56 130 64 132 74 L118 90 L105 78 Z"/>
+      <path class="fig-skin2" d="M110 66 C124 67 139 70 150 75 C154 77 154 81 151 83 C138 79 125 77 113 77 Z"/>
+      <path class="fig-skin" d="M116 57 C131 58 149 61 162 66 C166 68 166 72 162 74 C149 70 135 68 120 68 Z"/>
+      <path class="fig-skin" d="M113 55 L122 57 L123 47 L115 45 Z"/>
+      <path class="fig-skin" d="M115 45 C112 34 117 26 127 26 C137 27 141 35 138 44 C135 52 128 56 121 53 C118 51 116 48 115 45 Z"/>
+      <path class="fig-hair" d="M114 42 C112 31 118 23 127 23 C137 24 143 31 139 42 C136 35 131 31 124 31 C120 34 118 38 114 42 Z"/>
+      <path class="fig-detail" d="M130 43 L133 43"/>
+    </symbol>
+
+    <symbol id="fig-sumo" viewBox="0 0 220 170">
+      <ellipse class="gshadow" cx="110" cy="154" rx="66" ry="5"/>
+      <path class="fig-skin2" d="M97 104 C87 113 77 124 72 145 L84 147 C90 132 99 123 107 116 Z"/>
+      <path class="fig-skin" d="M123 104 C133 113 143 124 148 145 L136 147 C130 132 121 123 113 116 Z"/>
+      <path class="fig-shoe" d="M70 144 C76 143 83 145 86 149 C80 153 64 153 59 150 Z"/>
+      <path class="fig-sole" d="M59 150 C68 153 79 153 86 149 C87 153 84 155 64 155 C61 154 60 153 59 150 Z"/>
+      <path class="fig-shoe" d="M150 144 C144 143 137 145 134 149 C140 153 156 153 161 150 Z"/>
+      <path class="fig-sole" d="M161 150 C152 153 141 153 134 149 C133 153 136 155 156 155 C159 154 160 153 161 150 Z"/>
+      <path class="fig-shorts" d="M88 90 C101 87 119 87 132 90 L138 111 C129 116 119 118 110 117 C101 118 91 116 82 111 Z"/>
+      <path class="fig-shirt" d="M93 51 C103 45 117 45 127 51 L126 96 C116 100 103 100 94 96 Z"/>
+      <path class="fig-detail" d="M110 52 L110 94"/>
+      <path class="fig-skin" d="M94 55 C86 63 86 75 90 82 L103 91 L108 84 L98 76 L102 58 Z"/>
+      <path class="fig-skin" d="M126 55 C134 63 134 75 130 82 L117 91 L112 84 L122 76 L118 58 Z"/>
+      <path class="fig-dumbbell" d="M96 84 L124 84 L124 91 L116 91 L116 103 L104 103 L104 91 L96 91 Z"/>
+      <path class="fig-skin" d="M104 48 L116 48 L116 40 L104 40 Z"/>
+      <path class="fig-skin" d="M101 37 C100 27 104 20 110 20 C118 20 122 27 120 36 C119 44 115 49 110 49 C105 49 102 44 101 37 Z"/>
+      <path class="fig-hair" d="M101 34 C100 24 105 17 111 17 C119 18 123 24 120 34 C117 29 113 27 110 27 C106 27 103 30 101 34 Z"/>
+      <path class="fig-detail" d="M105 37 L108 37 M113 37 L116 37"/>
+    </symbol>
+
+    <symbol id="fig-press" viewBox="0 0 220 170">
+      <ellipse class="gshadow" cx="110" cy="154" rx="47" ry="5"/>
+      <path class="fig-skin2" d="M97 106 C100 119 99 134 97 147 L108 147 C111 133 111 119 108 106 Z"/>
+      <path class="fig-skin" d="M112 106 C110 120 111 134 114 147 L125 147 C122 133 122 119 123 106 Z"/>
+      <path class="fig-shoe" d="M94 145 C100 144 106 145 109 149 C105 153 92 153 89 150 Z"/>
+      <path class="fig-sole" d="M89 150 C96 153 104 153 109 149 C110 153 107 155 93 155 C90 154 89 152 89 150 Z"/>
+      <path class="fig-shoe" d="M126 145 C120 144 114 145 111 149 C115 153 128 153 131 150 Z"/>
+      <path class="fig-sole" d="M131 150 C124 153 116 153 111 149 C110 153 113 155 127 155 C130 154 131 152 131 150 Z"/>
+      <path class="fig-shorts" d="M91 91 C103 89 117 89 129 91 L130 109 C119 113 101 113 90 109 Z"/>
+      <path class="fig-shirt" d="M94 52 C104 47 116 47 126 52 L125 96 C116 100 104 100 95 96 Z"/>
+      <path class="fig-skin" d="M97 56 C91 48 90 40 92 31 L101 33 C99 41 101 48 105 54 Z"/>
+      <path class="fig-skin" d="M92 32 L101 34 L97 20 L88 22 Z"/>
+      <path class="fig-skin" d="M123 56 C129 48 130 40 128 31 L119 33 C121 41 119 48 115 54 Z"/>
+      <path class="fig-skin" d="M128 32 L119 34 L123 20 L132 22 Z"/>
+      <path class="fig-dumbbell" d="M78 16 L102 16 L102 23 L78 23 Z M72 11 L79 11 L79 28 L72 28 Z M101 11 L108 11 L108 28 L101 28 Z"/>
+      <path class="fig-dumbbell" d="M118 16 L142 16 L142 23 L118 23 Z M112 11 L119 11 L119 28 L112 28 Z M141 11 L148 11 L148 28 L141 28 Z"/>
+      <path class="fig-skin" d="M104 48 L116 48 L116 40 L104 40 Z"/>
+      <path class="fig-skin" d="M101 37 C100 27 104 20 110 20 C118 20 122 27 120 36 C119 44 115 49 110 49 C105 49 102 44 101 37 Z"/>
+      <path class="fig-hair" d="M101 34 C100 24 105 17 111 17 C119 18 123 24 120 34 C117 29 113 27 110 27 C106 27 103 30 101 34 Z"/>
+      <path class="fig-detail" d="M105 37 L108 37 M113 37 L116 37"/>
+    </symbol>
+
+    <symbol id="fig-pushup" viewBox="0 0 220 170">
+      <ellipse class="gshadow" cx="108" cy="155" rx="84" ry="5"/>
+      <path class="fig-skin2" d="M93 105 C80 111 62 119 41 132 L47 142 C68 132 85 125 101 121 Z"/>
+      <path class="fig-shoe" d="M36 130 C41 131 46 136 48 142 L43 149 C34 149 28 145 27 140 Z"/>
+      <path class="fig-sole" d="M28 141 C33 147 38 149 43 149 L44 152 C35 154 26 149 25 143 Z"/>
+      <path class="fig-shorts" d="M86 99 C96 99 105 103 113 109 L104 126 C95 125 85 120 78 115 Z"/>
+      <path class="fig-shirt" d="M104 101 C119 94 138 89 154 90 C158 94 160 100 158 106 C142 108 125 113 108 120 Z"/>
+      <path class="fig-shirt2" d="M124 95 C137 91 148 90 154 91 L157 105 C145 107 134 109 121 114 Z"/>
+      <path class="fig-skin2" d="M131 101 C136 101 140 103 141 108 L137 148 L128 148 Z"/>
+      <path class="fig-skin" d="M145 97 C150 97 153 100 153 105 L149 150 L139 150 L140 109 Z"/>
+      <path class="fig-skin" d="M128 147 C136 146 143 147 151 150 L151 154 C143 155 134 154 127 153 Z"/>
+      <path class="fig-skin" d="M151 90 L159 90 L157 80 L150 81 Z"/>
+      <path class="fig-skin" d="M156 79 C157 69 164 63 173 65 C182 67 184 75 180 82 C176 89 168 93 162 89 C158 87 156 84 156 79 Z"/>
+      <path class="fig-hair" d="M155 78 C157 67 165 61 174 63 C183 65 186 73 180 80 C178 74 173 71 168 71 C163 71 160 75 155 78 Z"/>
+      <path class="fig-detail" d="M174 80 L177 80"/>
+    </symbol>
+
+    <symbol id="fig-row" viewBox="0 0 220 170">
+      <ellipse class="gshadow" cx="111" cy="154" rx="57" ry="5"/>
+      <path class="fig-skin2" d="M81 94 C91 99 96 110 96 121 L93 146 L83 146 C82 128 78 113 71 104 Z"/>
+      <path class="fig-skin" d="M93 93 C104 98 108 110 108 122 L110 146 L99 146 C97 128 93 113 85 103 Z"/>
+      <path class="fig-shoe" d="M82 144 C89 144 96 146 99 150 C94 153 82 153 78 150 Z"/>
+      <path class="fig-sole" d="M78 150 C84 153 94 153 99 150 C100 153 97 155 83 155 C80 154 79 152 78 150 Z"/>
+      <path class="fig-shoe" d="M108 144 C115 144 121 146 123 150 C118 153 106 153 103 150 Z"/>
+      <path class="fig-sole" d="M103 150 C109 153 118 153 123 150 C124 153 121 155 108 155 C105 154 104 152 103 150 Z"/>
+      <path class="fig-shorts" d="M75 81 C86 81 99 85 108 91 L111 108 C98 111 85 107 77 101 Z"/>
+      <path class="fig-shirt" d="M80 87 C97 78 117 67 136 60 C145 63 149 70 149 77 L97 107 C90 102 84 95 80 87 Z"/>
+      <path class="fig-shirt2" d="M118 69 C127 64 134 61 139 61 C145 65 147 70 147 75 L125 88 Z"/>
+      <path class="fig-skin2" d="M124 76 C130 78 134 81 133 87 L128 110 L119 108 L120 85 Z"/>
+      <path class="fig-skin" d="M134 70 C140 72 143 76 141 82 L136 96 L127 92 L129 77 Z"/>
+      <path class="fig-skin" d="M135 92 L144 95 L137 109 L128 105 Z"/>
+      <path class="fig-dumbbell" d="M114 101 L145 101 L145 108 L114 108 Z M107 96 L114 96 L114 113 L107 113 Z M145 96 L152 96 L152 113 L145 113 Z"/>
+      <path class="fig-skin" d="M136 66 L145 70 L149 61 L140 57 Z"/>
+      <path class="fig-skin" d="M143 55 C144 45 151 40 158 43 C166 47 166 55 161 61 C156 67 149 67 145 62 C143 60 142 58 143 55 Z"/>
+      <path class="fig-hair" d="M143 54 C144 44 151 38 158 40 C166 43 168 50 161 56 C159 51 156 49 152 49 C148 49 146 52 143 54 Z"/>
+      <path class="fig-detail" d="M156 55 L159 55"/>
+    </symbol>
+
+    <symbol id="fig-curl" viewBox="0 0 220 170">
+      <ellipse class="gshadow" cx="110" cy="154" rx="47" ry="5"/>
+      <path class="fig-skin2" d="M97 106 C100 119 99 134 97 147 L108 147 C111 133 111 119 108 106 Z"/>
+      <path class="fig-skin" d="M112 106 C110 120 111 134 114 147 L125 147 C122 133 122 119 123 106 Z"/>
+      <path class="fig-shoe" d="M94 145 C100 144 106 145 109 149 C105 153 92 153 89 150 Z"/>
+      <path class="fig-sole" d="M89 150 C96 153 104 153 109 149 C110 153 107 155 93 155 C90 154 89 152 89 150 Z"/>
+      <path class="fig-shoe" d="M126 145 C120 144 114 145 111 149 C115 153 128 153 131 150 Z"/>
+      <path class="fig-sole" d="M131 150 C124 153 116 153 111 149 C110 153 113 155 127 155 C130 154 131 152 131 150 Z"/>
+      <path class="fig-shorts" d="M91 91 C103 89 117 89 129 91 L130 109 C119 113 101 113 90 109 Z"/>
+      <path class="fig-shirt" d="M94 52 C104 47 116 47 126 52 L125 96 C116 100 104 100 95 96 Z"/>
+      <path class="fig-skin" d="M95 56 C92 65 91 75 95 82 L83 67 L76 72 L91 91 C96 94 101 90 100 85 L103 57 Z"/>
+      <path class="fig-skin" d="M125 56 C128 65 129 75 125 82 L137 67 L144 72 L129 91 C124 94 119 90 120 85 L117 57 Z"/>
+      <path class="fig-dumbbell" d="M69 63 L91 63 L91 70 L69 70 Z M63 57 L70 57 L70 76 L63 76 Z M90 57 L97 57 L97 76 L90 76 Z"/>
+      <path class="fig-dumbbell" d="M129 63 L151 63 L151 70 L129 70 Z M123 57 L130 57 L130 76 L123 76 Z M150 57 L157 57 L157 76 L150 76 Z"/>
+      <path class="fig-skin" d="M104 48 L116 48 L116 40 L104 40 Z"/>
+      <path class="fig-skin" d="M101 37 C100 27 104 20 110 20 C118 20 122 27 120 36 C119 44 115 49 110 49 C105 49 102 44 101 37 Z"/>
+      <path class="fig-hair" d="M101 34 C100 24 105 17 111 17 C119 18 123 24 120 34 C117 29 113 27 110 27 C106 27 103 30 101 34 Z"/>
+      <path class="fig-detail" d="M105 37 L108 37 M113 37 L116 37"/>
+    </symbol>
+
+    <!-- Anatomical line icons for the highlighted-muscle pills: torso/arm outline + pale highlight. -->
+    <symbol id="muscle-chest" viewBox="0 0 40 32">
+      <path class="muscle-line" d="M14 5 Q20 8 26 5 L30 11 L28 27 L12 27 L10 11 Z"/>
+      <path class="muscle-fill" d="M13 10 Q17 8 19.5 12 L19.5 17 Q15 17 12.5 13.5 Z"/>
+      <path class="muscle-fill" d="M27 10 Q23 8 20.5 12 L20.5 17 Q25 17 27.5 13.5 Z"/>
+    </symbol>
+    <symbol id="muscle-shoulders" viewBox="0 0 40 32">
+      <path class="muscle-line" d="M14 8 Q20 5 26 8 L30 13 L28 27 L12 27 L10 13 Z"/>
+      <path class="muscle-fill" d="M14 9 Q10.5 10 10 14 Q13 17 15.5 14 Q15 11 14 9 Z"/>
+      <path class="muscle-fill" d="M26 9 Q29.5 10 30 14 Q27 17 24.5 14 Q25 11 26 9 Z"/>
+      <path class="muscle-line" d="M20 10 L20 26"/>
+    </symbol>
+    <symbol id="muscle-triceps" viewBox="0 0 40 32">
+      <path class="muscle-line" d="M15 4 Q22 3 25 8 L27 16 L26 27 L19 27 L20 17 L14 10 Z"/>
+      <path class="muscle-fill" d="M21 8 Q24.5 10 24.5 16 L23.5 23 L20.5 22 L21.5 15 Z"/>
+    </symbol>
+    <symbol id="muscle-biceps" viewBox="0 0 40 32">
+      <path class="muscle-line" d="M13 7 Q19 3 24 6 L27 12 L32 17 L29 26 L19 25 L16 17 L11 12 Z"/>
+      <path class="muscle-fill" d="M16 10 Q22 7 24.5 14 Q24 19 19 18.5 Q15.5 15 16 10 Z"/>
+    </symbol>
+    <symbol id="muscle-back" viewBox="0 0 40 32">
+      <path class="muscle-line" d="M14 5 Q20 8 26 5 L30 11 L27 27 L13 27 L10 11 Z"/>
+      <path class="muscle-fill" d="M14 10 Q18 9 19.5 13 L18 24 L14.5 23 Z"/>
+      <path class="muscle-fill" d="M26 10 Q22 9 20.5 13 L22 24 L25.5 23 Z"/>
+      <path class="muscle-line" d="M20 13 L20 26"/>
+    </symbol>
+    <symbol id="muscle-glutes" viewBox="0 0 40 32">
+      <path class="muscle-line" d="M13 5 L27 5 L30 15 Q30 25 20 27 Q10 25 10 15 Z"/>
+      <path class="muscle-fill" d="M13 12 Q17 9 19.5 13 L19.5 24 Q13 23 12 17 Z"/>
+      <path class="muscle-fill" d="M27 12 Q23 9 20.5 13 L20.5 24 Q27 23 28 17 Z"/>
+    </symbol>
+    <symbol id="muscle-legs" viewBox="0 0 40 32">
+      <path class="muscle-line" d="M12 4 L19 4 L18 15 L16 28 L11 28 L13 15 Z"/>
+      <path class="muscle-line" d="M21 4 L28 4 L27 15 L29 28 L24 28 L22 15 Z"/>
+      <path class="muscle-fill" d="M13.5 6 L17.5 6 L17 14 L14.5 14 Z"/>
+      <path class="muscle-fill" d="M22.5 6 L26.5 6 L27 14 L23.5 14 Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="top">
+    <div class="logo"><svg><use href="#logo-db"/></svg></div>
+    <div class="top-title">
+      <div class="eyebrow">今日 · 身体唤醒</div>
+      <h1 id="dayTitle">周六 · 身体唤醒</h1>
+    </div>
+    <div class="top-prog">
+      <div class="count num"><span id="progNum">0</span><small id="progTotal"> / 5</small></div>
+      <div class="bar"><i id="progBar"></i></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="queue" id="queue" aria-label="动作清单"></nav>
+
+    <div class="workout-card">
+      <main class="stage" id="stage">
+        <div class="ex-head">
+          <h2 id="exName">原地踏步</h2>
+          <div class="rx" id="rxLine"><b>1 分钟</b> · 完成后调整呼吸 <b>15 秒</b></div>
+        </div>
+        <div class="tags" id="tags"></div>
+        <div class="fig-box" id="figBox"></div>
+        <button class="done-btn" id="doneBtn">✓&nbsp; 完成，开始休息</button>
+        <button class="skip-btn" id="skipBtn">跳过这个动作 →</button>
+        <a class="tut" id="tut" href="#" target="_blank" rel="noopener">
+          <span class="play">▶</span>
+          <span class="t-text">
+            <div class="t-label">观看教程</div>
+            <div class="t-title" id="tutTitle"></div>
+          </span>
+          <span class="ext">↗</span>
+        </a>
+      </main>
+
+      <aside class="rest">
+        <div class="rest-head">⏱ 休息</div>
+        <div class="ring-wrap">
+          <svg viewBox="0 0 176 176">
+            <circle class="ring-ticks" cx="88" cy="88" r="60" stroke-dasharray="2 29.4"/>
+            <circle class="ring-track" cx="88" cy="88" r="72"/>
+            <circle class="ring-prog" id="ringProg" cx="88" cy="88" r="72"
+                    stroke-dasharray="452.4" stroke-dashoffset="0" transform="rotate(-90 88 88)"/>
+          </svg>
+          <div class="ring-center">
+            <div class="clock num" id="clock">00:45</div>
+            <div class="clock-sub" id="clockSub">准备就绪</div>
+          </div>
+        </div>
+        <div class="tip" role="status"><span class="ico" id="tipIco">💡</span><span id="tipText">完成一个动作后，点击「完成」开始休息计时。</span></div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="note" id="note">
+    今天是身体唤醒日：唤醒关节、活络气血、舒展脊柱，为一天注入活力。动作轻柔，量力而行，不追求强度——徒手即可，随时随地都能做。
+  </footer>
+</div>
+
+<script>
+  // 每日自动切换：按本地日期 new Date().getDay() 选当天计划，过凌晨0点即切换（见 weekly_plan.md）。
+  // 训练日（周一/三/五）动作取自 exercises.db；唤醒日（周二/四/六/日）为固定 5 动作。
+  const A = 'assets/workout-illustrations/';
+  // 训练动作库（art/url/vt 来自 exercises.db，targets 取每个动作最相关的 1–2 个）
+  const LIB = {
+    squat:    { name: '深蹲',        targets: ['大腿前侧', '臀部'],     art: A + 'deep-squat.png',              url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    sumo:     { name: '相扑深蹲',    targets: ['臀部', '大腿后侧'],     art: A + 'sumo-squat.png',              url: 'https://www.bilibili.com/video/BV1GY411F7mE', vt: '一对哑铃8个动作，在家练遍全身肌肉+燃掉脂肪！' },
+    press:    { name: '哑铃推举',    targets: ['三角肌', '三头肌'],     art: A + 'dumbbell-overhead-press.png', url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    leanpush: { name: '前倾俯卧撑',  targets: ['三角肌前束', '三头肌'], art: A + 'forward-leaning-push-up.png', url: 'https://www.bilibili.com/video/BV17h411p75Q', vt: '让你肌肉暴涨的5种俯卧撑' },
+    row:      { name: '哑铃俯身划船', targets: ['背阔肌', '上背'],      art: A + 'dumbbell-bent-over-row.png',  url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    curl:     { name: '哑铃弯举',    targets: ['肱二头肌'],             art: A + 'dumbbell-bicep-curl.png',     url: 'https://www.bilibili.com/video/BV17x4y1b7A8', vt: '练小臂用3个技巧，摆脱细弱，迅速增粗！' },
+    pushup:   { name: '标准俯卧撑',  targets: ['胸肌', '三头肌'],       art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV17F411u7Yx', vt: '俯卧撑少了这5个技巧，肌肉很难增长' },
+    pushup2:  { name: '俯卧撑',      targets: ['胸肌', '肩膀'],         art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
+    crunch:   { name: '卷腹',        targets: ['腹直肌', '核心'],       art: A + 'crunch.png',                  url: 'https://www.bilibili.com/video/BV1644y1i7fc', vt: '腰间的肉不好看，该如何锻炼才有型？' },
+    plank:    { name: '平板支撑',    targets: ['核心', '腹肌'],         art: A + 'plank.png',                   url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
+    deadlift: { name: '哑铃硬拉',    targets: ['臀部', '大腿后侧'],     art: A + 'dumbbell-deadlift.png',       url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    sldl:     { name: '单腿硬拉',    targets: ['臀部', '平衡'],         art: A + 'single-leg-deadlift.png',     url: 'https://www.bilibili.com/video/BV17w411N7hz', vt: '不练这里，所有体态问题都难解决!（强化根基）' },
+  };
+  // 唤醒日固定动作（只有猫牛式配教程视频）
+  const WAKE = [
+    { name: '原地踏步',   targets: ['腿部', '臀部'],     reps: '1 分钟', art: A + 'march-in-place.png' },
+    { name: '肩绕环',     targets: ['肩关节', '上背'],   reps: '10 次',  art: A + 'shoulder-circles.png' },
+    { name: '髋关节绕环', targets: ['髋部', '腿部'],     reps: '10 次',  art: A + 'hip-circles.png' },
+    { name: '徒手深蹲',   targets: ['大腿前侧', '臀部'], reps: '10 次',  art: A + 'deep-squat.png' },
+    { name: '猫牛式',     targets: ['脊柱', '肩颈'],     reps: '8 次',   art: A + 'cat-cow.png', url: 'https://www.bilibili.com/video/BV1dd4y1N7RM', vt: '猫牛式 | 伸展脊柱 缓解腰背痛 新人必看' },
+  ];
+  // 周日=0 … 周六=6；未列出的天 = 身体唤醒日（周二/四/六/日）
+  const PLAN = {
+    1: { title: '深蹲 + 推 + 核心', ex: ['squat', 'sumo', 'pushup', 'pushup2', 'crunch', 'plank'] },
+    3: { title: '硬拉 + 拉 + 核心', ex: ['deadlift', 'sldl', 'row', 'curl', 'crunch', 'plank'] },
+    5: { title: '深蹲 + 肩推 + 拉', ex: ['squat', 'sumo', 'press', 'leanpush', 'row', 'curl'] },
+  };
+  const WEEKDAY = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  const TARGET_ICON = {
+    '大腿前侧': 'muscle-legs', '大腿后侧': 'muscle-legs', '腿部': 'muscle-legs', '平衡': 'muscle-legs',
+    '臀部': 'muscle-glutes', '髋部': 'muscle-glutes',
+    '三角肌': 'muscle-shoulders', '三角肌前束': 'muscle-shoulders', '肩膀': 'muscle-shoulders', '肩关节': 'muscle-shoulders', '肩颈': 'muscle-shoulders',
+    '三头肌': 'muscle-triceps', '肱二头肌': 'muscle-biceps',
+    '背阔肌': 'muscle-back', '上背': 'muscle-back', '背部': 'muscle-back', '脊柱': 'muscle-back',
+    '胸肌': 'muscle-chest', '核心': 'muscle-chest', '腹直肌': 'muscle-chest', '腹肌': 'muscle-chest',
+  };
+  const CIRC = 452.4, KEY = 'fit-daily-v2';
+
+  // 依本地星期几解析当天计划：训练日 3 组/45 秒休息；唤醒日 1 组/15 秒调整。
+  function todayPlan() {
+    const d = new Date().getDay();
+    const p = PLAN[d];
+    if (!p) return { wake: true,  day: d, title: '身体唤醒', ex: WAKE,                  cycles: 1, rest: 15 };
+    return         { wake: false, day: d, title: p.title,   ex: p.ex.map(k => LIB[k]), cycles: 3, rest: 45 };
+  }
+
+  let plan, EX, REST, CYCLES, dayStamp;
+  let idx = 0, done = [], cycles = [], resting = false, endAt = 0, timerId = null;
+
+  const $ = id => document.getElementById(id);
+  const queue = $('queue');
+  const muscleTag = name =>
+    '<span class="tag"><svg viewBox="0 0 40 32" aria-hidden="true"><use href="#' + (TARGET_ICON[name] || 'muscle-chest') + '"/></svg><span>' + name + '</span></span>';
+
+  // ponytail: state lives in module vars; localStorage only guards against a mid-workout refresh
+  function save() { try { localStorage.setItem(KEY, JSON.stringify({ d: done, c: cycles, i: idx, dt: dayStamp })); } catch (e) {} }
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY));
+      if (s && s.dt === dayStamp && Array.isArray(s.d) && s.d.length === EX.length) {
+        done = s.d; idx = s.i;
+        cycles = Array.isArray(s.c) && s.c.length === EX.length ? s.c : EX.map(() => 0);
+      }
+    } catch (e) {}
+  }
+
+  function fmt(sec) { return '00:' + String(sec).padStart(2, '0'); }
+  function allDone() { return done.every(Boolean); }
+
+  function buildQueue() {
+    queue.innerHTML = '';
+    EX.forEach((ex, i) => {
+      const b = document.createElement('button');
+      b.className = 'q-item';
+      b.innerHTML =
+        '<span class="q-mark"></span>' +
+        '<span class="q-name">' + ex.name + '<small>' + ex.targets.join(' · ') + '</small></span>' +
+        '<span class="q-fig"><img src="' + ex.art + '" alt=""></span>' +
+        '<span class="q-done" aria-hidden="true">✓</span>';
+      b.addEventListener('click', () => {
+        stopTimer(); resting = false; idx = i; render();
+      });
+      queue.appendChild(b);
+    });
+  }
+
+  function render() {
+    EX.forEach((ex, i) => {
+      const b = queue.children[i];
+      b.classList.toggle('done', done[i]);
+      b.classList.toggle('current', i === idx && !allDone());
+      b.querySelector('.q-mark').textContent = i + 1;
+    });
+    // 计数 = 当前第几个动作（参考图语义：3/6 = 正在做第3个），完赛时 6/6
+    const pos = allDone() ? EX.length : (idx + 1);
+    $('progNum').textContent = pos;
+    $('progBar').style.width = (pos / EX.length * 100) + '%';
+
+    if (allDone()) { renderFinish(); return; }
+
+    const ex = EX[idx];
+    const set = Math.min(cycles[idx] + 1, CYCLES);
+    $('exName').textContent = ex.name;
+    $('rxLine').innerHTML = plan.wake
+      ? '<b>' + ex.reps + '</b> · 完成后调整呼吸 <b>' + REST + ' 秒</b>'
+      : '<b>第 ' + set + '/' + CYCLES + ' 组</b> · 8–10 次 · 完成后休息 <b>30–45 秒</b>';
+    $('tags').innerHTML = ex.targets.map(muscleTag).join('');
+    $('figBox').innerHTML = '<img class="exercise-art" src="' + ex.art + '" alt="' + ex.name + ' 动作示意">';
+    if (ex.url) { $('tut').href = ex.url; $('tutTitle').textContent = ex.vt; $('tut').style.display = ''; }
+    else { $('tut').style.display = 'none'; }
+    $('tags').style.display = '';
+    $('skipBtn').style.display = '';
+
+    const btn = $('doneBtn');
+    btn.style.display = '';
+    if (resting) {
+      btn.classList.add('resting');
+      btn.textContent = '休息中 · 点击跳过 →';
+    } else {
+      btn.classList.remove('resting');
+      btn.innerHTML = '✓&nbsp; 完成，开始休息';
+      $('clock').textContent = fmt(REST);
+      $('clockSub').textContent = '准备就绪';
+      $('ringProg').style.strokeDashoffset = 0;
+      setTip('💡', plan.wake
+        ? '完成「' + ex.name + '」后，点击下方按钮开始短暂调整。'
+        : '完成第 ' + set + ' 组「' + ex.name + '」后，点击下方按钮开始休息计时。');
+    }
+  }
+
+  function setTip(ico, text) { $('tipIco').textContent = ico; $('tipText').textContent = text; }
+
+  function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
+
+  function startRest() {
+    resting = true;
+    endAt = Date.now() + REST * 1000;
+    setTip('💪', done[idx] ? '干得漂亮！喘口气，休息结束自动进入下一个动作。' : '干得漂亮！喘口气，休息结束自动开始下一组。');
+    $('clockSub').textContent = '休息中';
+    render();
+    tick();
+    timerId = setInterval(tick, 200);
+  }
+
+  function tick() {
+    const remain = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    $('clock').textContent = fmt(remain);
+    $('clockSub').textContent = '休息中';
+    $('ringProg').style.strokeDashoffset = CIRC * (1 - remain / REST);
+    if (remain <= 0) endRest();
+  }
+
+  function nextUndone() {
+    for (let k = 1; k <= EX.length; k++) {
+      const j = (idx + k) % EX.length;
+      if (!done[j]) return j;
+    }
+    return -1;
+  }
+
+  function endRest() {
+    stopTimer();
+    resting = false;
+    if (done[idx]) {                      // 3 组全部完成才前进到下一动作
+      const next = nextUndone();
+      if (next >= 0) idx = next;
+    }
+    save();
+    render();
+  }
+
+  function skipExercise() {               // 跳过当前动作剩余组数
+    stopTimer();
+    resting = false;
+    done[idx] = true;
+    const next = nextUndone();
+    if (next >= 0) idx = next;
+    save();
+    render();
+  }
+
+  function renderFinish() {
+    $('exName').textContent = plan.wake ? '身体唤醒完成！' : '今日训练完成！';
+    $('rxLine').innerHTML = plan.wake
+      ? '关节舒展、气血流动，<b>元气满满开始新的一天 →</b>'
+      : '身体已激活，<b>收拾收拾出发去健身房吧 →</b>';
+    $('tags').style.display = 'none';
+    $('figBox').innerHTML =
+      '<div class="pop"><img class="finish-art" src="assets/finish-icon-options/c-star-cup.svg" alt="完成奖杯">' +
+      '<div class="celebrate-msg">' + EX.length + ' 个动作全部完成</div>' +
+      '<div class="celebrate-sub">' + (plan.wake ? '身体已唤醒，元气满满开始新的一天！' : '坚持就是胜利，明天同一时间见！') + '</div></div>';
+    $('tut').style.display = 'none';
+    $('skipBtn').style.display = 'none';
+    const btn = $('doneBtn');
+    btn.style.display = '';
+    btn.classList.remove('resting');
+    btn.textContent = '↺ 再练一遍';
+    $('clock').textContent = '✓';
+    $('clockSub').textContent = '全部完成';
+    $('ringProg').style.strokeDashoffset = 0;
+    setTip('✓', '今日 ' + EX.length + ' 个动作全部完成，明天见！');
+  }
+
+  $('doneBtn').addEventListener('click', () => {
+    if (allDone()) {                      // 再练一遍
+      done = EX.map(() => false); cycles = EX.map(() => 0); idx = 0; resting = false; stopTimer(); save(); render(); return;
+    }
+    if (resting) { endRest(); return; }   // 跳过休息
+    cycles[idx]++;                        // 完成一组
+    if (cycles[idx] >= CYCLES) done[idx] = true;
+    save();
+    if (allDone()) { stopTimer(); resting = false; render(); }
+    else startRest();
+  });
+
+  $('skipBtn').addEventListener('click', skipExercise);
+
+  // 载入当天计划，刷新标题/头部/页脚文案
+  function applyPlan() {
+    plan = todayPlan();
+    EX = plan.ex; REST = plan.rest; CYCLES = plan.cycles;
+    dayStamp = new Date().toDateString();
+    const label = WEEKDAY[plan.day] + ' · ' + plan.title;
+    document.title = '今日 · ' + label;
+    $('dayTitle').textContent = label;
+    document.querySelector('.top-title .eyebrow').textContent = plan.wake ? '今日 · 身体唤醒' : '今日训练 · 出发前激活';
+    $('progTotal').textContent = ' / ' + EX.length;
+    $('skipBtn').textContent = plan.wake ? '跳过这个动作 →' : '跳过剩余组，下一动作 →';
+    $('note').textContent = plan.wake
+      ? '今天是身体唤醒日：唤醒关节、活络气血、舒展脊柱，为一天注入活力。动作轻柔，量力而行，不追求强度——徒手即可，随时随地都能做。'
+      : '前2周维持8–10次；熟练后升到10–15次。留有余力，不追求力竭——这是去健身房前的身体激活，不是正式训练。器材：徒手 + 2×5kg哑铃。';
+  }
+
+  function init() {
+    stopTimer();
+    applyPlan();
+    done = EX.map(() => false); cycles = EX.map(() => 0); idx = 0; resting = false;
+    load();
+    buildQueue();
+    render();
+  }
+
+  // 过凌晨0点自动切换到新一天：轮询 + 切回前台时立即校正
+  setInterval(() => { if (new Date().toDateString() !== dayStamp) init(); }, 30000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && new Date().toDateString() !== dayStamp) init(); });
+
+  init();
+</script>
