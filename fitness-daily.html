@@ -325,6 +325,31 @@
   .tag:nth-child(odd) svg { transform: rotate(-.55deg); }
   .tag:nth-child(even) svg { transform: rotate(.45deg); }
   .tag span { line-height: 1; transform: translateY(.25px); }
+  /* Three restrained hand-drawn treatments, kept within one teal tag system. */
+  .tag--mist {
+    background: linear-gradient(145deg, #f1f9f7, #e1f1ed);
+    border-radius: 15px;
+  }
+  .tag--outline {
+    background: #f5fbf9;
+    border-color: #b8ddd7;
+    border-radius: 17px 13px 18px 14px;
+    box-shadow: 0 1px 2px rgba(39,112,108,.07), inset 0 0 0 1px rgba(255,255,255,.82);
+    transform: rotate(-.3deg);
+  }
+  .tag--wash {
+    background: linear-gradient(135deg, #eff9f7 8%, #d9eeea 100%);
+    border-color: #cfe7e2;
+    border-radius: 999px 17px 17px 999px;
+    box-shadow: 0 2px 3px rgba(39,112,108,.07), inset 0 1px 0 rgba(255,255,255,.9);
+    transform: rotate(.3deg);
+  }
+  /* Generated paper-tag assets replace the earlier CSS/SVG treatments. */
+  .tag, .tag--mist, .tag--outline, .tag--wash {
+    display: inline-block; min-height: 0; padding: 0;
+    border: 0; border-radius: 0; background: transparent; box-shadow: none; transform: none;
+  }
+  .tag img { display: block; width: auto; height: clamp(48px, 3.4vw, 68px); object-fit: contain; }
   .fig-box { min-height: 270px; padding: 8px 0 16px; border-bottom: 2px solid var(--line); }
   .fig-box svg { width: min(620px, 100%); }
   .fig-box .exercise-art {
@@ -410,7 +435,7 @@
     .q-fig { width: 76px; height: 62px; }
     .stage { padding: 28px 18px 18px; }
     .tags { gap: 8px; }
-    .tag { padding: 8px 10px; font-size: 12px; }
+    .tag img { height: 44px; }
     .done-btn { padding: 18px 12px; }
     .tut { padding: 12px; }
     .tut .play { width: 82px; height: 60px; }
@@ -652,28 +677,28 @@
   // 每日自动切换：按本地日期 new Date().getDay() 选当天计划，过凌晨0点即切换（见 weekly_plan.md）。
   // 训练日（周一/三/五）动作取自 exercises.db；唤醒日（周二/四/六/日）为固定 5 动作。
   const A = 'assets/workout-illustrations/';
-  // 训练动作库（art/url/vt 来自 exercises.db，targets 取每个动作最相关的 1–2 个）
+  // 训练动作库（art/url/vt 来自 exercises.db，targets 取每个动作最相关的 1–3 个）
   const LIB = {
     squat:    { name: '深蹲',        targets: ['大腿前侧', '臀部'],     art: A + 'deep-squat.png',              url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
     sumo:     { name: '相扑深蹲',    targets: ['臀部', '大腿后侧'],     art: A + 'sumo-squat.png',              url: 'https://www.bilibili.com/video/BV1GY411F7mE', vt: '一对哑铃8个动作，在家练遍全身肌肉+燃掉脂肪！' },
     press:    { name: '哑铃推举',    targets: ['三角肌', '三头肌'],     art: A + 'dumbbell-overhead-press.png', url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
     leanpush: { name: '前倾俯卧撑',  targets: ['三角肌前束', '三头肌'], art: A + 'forward-leaning-push-up.png', url: 'https://www.bilibili.com/video/BV17h411p75Q', vt: '让你肌肉暴涨的5种俯卧撑' },
-    row:      { name: '哑铃俯身划船', targets: ['背阔肌', '上背'],      art: A + 'dumbbell-bent-over-row.png',  url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    row:      { name: '哑铃俯身划船', targets: ['背阔肌', '肱二头肌'], art: A + 'dumbbell-bent-over-row.png',  url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
     curl:     { name: '哑铃弯举',    targets: ['肱二头肌'],             art: A + 'dumbbell-bicep-curl.png',     url: 'https://www.bilibili.com/video/BV17x4y1b7A8', vt: '练小臂用3个技巧，摆脱细弱，迅速增粗！' },
-    pushup:   { name: '标准俯卧撑',  targets: ['胸肌', '三头肌'],       art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV17F411u7Yx', vt: '俯卧撑少了这5个技巧，肌肉很难增长' },
-    pushup2:  { name: '俯卧撑',      targets: ['胸肌', '肩膀'],         art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
-    crunch:   { name: '卷腹',        targets: ['腹直肌', '核心'],       art: A + 'crunch.png',                  url: 'https://www.bilibili.com/video/BV1644y1i7fc', vt: '腰间的肉不好看，该如何锻炼才有型？' },
-    plank:    { name: '平板支撑',    targets: ['核心', '腹肌'],         art: A + 'plank.png',                   url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
-    deadlift: { name: '哑铃硬拉',    targets: ['臀部', '大腿后侧'],     art: A + 'dumbbell-deadlift.png',       url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
-    sldl:     { name: '单腿硬拉',    targets: ['臀部', '平衡'],         art: A + 'single-leg-deadlift.png',     url: 'https://www.bilibili.com/video/BV17w411N7hz', vt: '不练这里，所有体态问题都难解决!（强化根基）' },
+    pushup:   { name: '标准俯卧撑',  targets: ['胸肌', '肩膀', '三头肌'], art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV17F411u7Yx', vt: '俯卧撑少了这5个技巧，肌肉很难增长' },
+    pushup2:  { name: '俯卧撑',      targets: ['胸肌', '肩膀', '三头肌'], art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
+    crunch:   { name: '卷腹',        targets: ['核心'],                 art: A + 'crunch.png',                  url: 'https://www.bilibili.com/video/BV1644y1i7fc', vt: '腰间的肉不好看，该如何锻炼才有型？' },
+    plank:    { name: '平板支撑',    targets: ['核心', '肩膀'],         art: A + 'plank.png',                   url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
+    deadlift: { name: '哑铃硬拉',    targets: ['臀部', '大腿后侧', '背部'], art: A + 'dumbbell-deadlift.png',       url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    sldl:     { name: '单腿硬拉',    targets: ['臀部', '大腿后侧'],     art: A + 'single-leg-deadlift.png',     url: 'https://www.bilibili.com/video/BV17w411N7hz', vt: '不练这里，所有体态问题都难解决!（强化根基）' },
   };
   // 唤醒日固定动作（只有猫牛式配教程视频）
   const WAKE = [
-    { name: '原地踏步',   targets: ['腿部', '臀部'],     reps: '1 分钟', art: A + 'march-in-place.png' },
+    { name: '原地踏步',   targets: ['髋部', '大腿前侧'], reps: '1 分钟', art: A + 'march-in-place.png' },
     { name: '肩绕环',     targets: ['肩关节', '上背'],   reps: '10 次',  art: A + 'shoulder-circles.png' },
-    { name: '髋关节绕环', targets: ['髋部', '腿部'],     reps: '10 次',  art: A + 'hip-circles.png' },
+    { name: '髋关节绕环', targets: ['髋部'],             reps: '10 次',  art: A + 'hip-circles.png' },
     { name: '徒手深蹲',   targets: ['大腿前侧', '臀部'], reps: '10 次',  art: A + 'deep-squat.png' },
-    { name: '猫牛式',     targets: ['脊柱', '肩颈'],     reps: '8 次',   art: A + 'cat-cow.png', url: 'https://www.bilibili.com/video/BV1dd4y1N7RM', vt: '猫牛式 | 伸展脊柱 缓解腰背痛 新人必看' },
+    { name: '猫牛式',     targets: ['脊柱', '核心'],     reps: '8 次',   art: A + 'cat-cow.png', url: 'https://www.bilibili.com/video/BV1dd4y1N7RM', vt: '猫牛式 | 伸展脊柱 缓解腰背痛 新人必看' },
   ];
   // 周日=0 … 周六=6；未列出的天 = 身体唤醒日（周二/四/六/日）
   const PLAN = {
@@ -682,13 +707,17 @@
     5: { title: '深蹲 + 肩推 + 拉', ex: ['squat', 'sumo', 'press', 'leanpush', 'row', 'curl'] },
   };
   const WEEKDAY = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-  const TARGET_ICON = {
-    '大腿前侧': 'muscle-legs', '大腿后侧': 'muscle-legs', '腿部': 'muscle-legs', '平衡': 'muscle-legs',
-    '臀部': 'muscle-glutes', '髋部': 'muscle-glutes',
-    '三角肌': 'muscle-shoulders', '三角肌前束': 'muscle-shoulders', '肩膀': 'muscle-shoulders', '肩关节': 'muscle-shoulders', '肩颈': 'muscle-shoulders',
-    '三头肌': 'muscle-triceps', '肱二头肌': 'muscle-biceps',
-    '背阔肌': 'muscle-back', '上背': 'muscle-back', '背部': 'muscle-back', '脊柱': 'muscle-back',
-    '胸肌': 'muscle-chest', '核心': 'muscle-chest', '腹直肌': 'muscle-chest', '腹肌': 'muscle-chest',
+  const TAG_ASSET = {
+    '胸肌': 'chest', '上胸': 'chest', '单侧胸肌': 'chest',
+    '肩膀': 'shoulders', '肩关节': 'shoulders', '肩颈': 'shoulders', '三角肌': 'shoulders', '三角肌前束': 'shoulders', '三角肌后束': 'shoulders',
+    '三头肌': 'triceps', '肱三头肌': 'triceps',
+    '二头肌': 'biceps', '肱二头肌': 'biceps',
+    '背部': 'back', '上背': 'back', '背阔肌': 'back', '脊柱': 'back',
+    '核心': 'core', '核心稳定': 'core', '腹肌': 'core', '腹直肌': 'core', '下腹': 'core', '腹斜肌': 'core', '平衡': 'core',
+    '大腿前侧': 'quads', '腿部': 'quads',
+    '大腿后侧': 'hamstrings',
+    '臀部': 'glutes',
+    '髋部': 'hips',
   };
   const CIRC = 452.4, KEY = 'fit-daily-v2';
 
@@ -705,8 +734,10 @@
 
   const $ = id => document.getElementById(id);
   const queue = $('queue');
-  const muscleTag = name =>
-    '<span class="tag"><svg viewBox="0 0 40 32" aria-hidden="true"><use href="#' + (TARGET_ICON[name] || 'muscle-chest') + '"/></svg><span>' + name + '</span></span>';
+  const muscleTag = name => {
+    const asset = TAG_ASSET[name] || 'core';
+    return '<span class="tag"><img src="assets/muscle-tags/png/' + asset + '.png" alt="' + name + '" decoding="async"></span>';
+  };
 
   // ponytail: state lives in module vars; localStorage only guards against a mid-workout refresh
   function save() { try { localStorage.setItem(KEY, JSON.stringify({ d: done, c: cycles, i: idx, dt: dayStamp })); } catch (e) {} }
