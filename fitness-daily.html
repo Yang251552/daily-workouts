@@ -100,6 +100,19 @@
   .bar { width: 150px; height: 8px; border-radius: 999px; background: var(--ring-track); overflow: hidden; }
   .bar i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--accent); transition: width .35s ease; }
 
+  /* ---------- day switch (manual weekday override) ---------- */
+  .day-switch { display: flex; flex-wrap: wrap; gap: 10px; margin: -4px 0 20px; }
+  .day-btn {
+    cursor: pointer; border: 2px solid var(--line); border-radius: 999px;
+    background: var(--card); color: var(--dim);
+    padding: 8px 18px; font-size: 15px; font-weight: 800;
+    font-family: var(--font-hand-display); letter-spacing: .03em;
+    transition: border-color .12s ease, color .12s ease, background .12s ease;
+  }
+  .day-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .day-btn.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .day-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
   /* ---------- 3-column layout ---------- */
   .layout { display: grid; grid-template-columns: 296px minmax(0,1fr) 260px; gap: 16px; align-items: start; }
 
@@ -626,6 +639,8 @@
     </div>
   </header>
 
+  <nav class="day-switch" id="daySwitch" aria-label="选择训练日"></nav>
+
   <div class="layout">
     <nav class="queue" id="queue" aria-label="动作清单"></nav>
 
@@ -723,14 +738,16 @@
 
   // 依本地星期几解析当天计划：训练日 3 组/45 秒休息；唤醒日 1 组/15 秒调整。
   function todayPlan() {
-    const d = new Date().getDay();
+    const d = override != null ? override : new Date().getDay();
     const p = PLAN[d];
     if (!p) return { wake: true,  day: d, title: '身体唤醒', ex: WAKE,                  cycles: 1, rest: 15 };
     return         { wake: false, day: d, title: p.title,   ex: p.ex.map(k => LIB[k]), cycles: 3, rest: 45 };
   }
 
-  let plan, EX, REST, CYCLES, dayStamp;
+  let plan, EX, REST, CYCLES, dayStamp, realStamp;
   let idx = 0, done = [], cycles = [], resting = false, endAt = 0, timerId = null;
+  let override = null;           // null = 自动跟随今天；0–6 = 手动选定的星期几
+  const DKEY = 'fit-daily-day';  // 手动选定日期（仅当天有效，跨凌晨自动失效回到自动）
 
   const $ = id => document.getElementById(id);
   const queue = $('queue');
@@ -749,6 +766,42 @@
         cycles = Array.isArray(s.c) && s.c.length === EX.length ? s.c : EX.map(() => 0);
       }
     } catch (e) {}
+  }
+
+  // 手动选定日期：仅当天有效，跨凌晨（真实日历日变化）自动失效，回到自动跟随今天。
+  function loadOverride() {
+    try {
+      const s = JSON.parse(localStorage.getItem(DKEY));
+      if (s && s.on === new Date().toDateString() && typeof s.day === 'number') return s.day;
+    } catch (e) {}
+    return null;
+  }
+  function saveOverride() {
+    try {
+      if (override == null) localStorage.removeItem(DKEY);
+      else localStorage.setItem(DKEY, JSON.stringify({ day: override, on: new Date().toDateString() }));
+    } catch (e) {}
+  }
+
+  const daySwitch = $('daySwitch');
+  const SWITCH_DAYS = [1, 2, 3, 4, 5];   // 周一~周五（覆盖全部 3 训练日 + 2 唤醒日）
+  function buildDaySwitch() {
+    daySwitch.innerHTML = '';
+    const mk = (label, val) => {
+      const b = document.createElement('button');
+      b.className = 'day-btn';
+      b.textContent = label;
+      b.addEventListener('click', () => { override = val; saveOverride(); init(); });
+      daySwitch.appendChild(b);
+    };
+    mk('自动', null);
+    SWITCH_DAYS.forEach(d => mk(WEEKDAY[d], d));
+  }
+  function markDaySwitch() {
+    [...daySwitch.children].forEach((b, i) => {
+      const val = i === 0 ? null : SWITCH_DAYS[i - 1];
+      b.classList.toggle('active', val === override);
+    });
   }
 
   function fmt(sec) { return '00:' + String(sec).padStart(2, '0'); }
@@ -906,7 +959,9 @@
   function applyPlan() {
     plan = todayPlan();
     EX = plan.ex; REST = plan.rest; CYCLES = plan.cycles;
-    dayStamp = new Date().toDateString();
+    realStamp = new Date().toDateString();
+    dayStamp = override != null ? ('ovr-' + override) : realStamp;  // 手动选定的进度与真实今天分开存
+    markDaySwitch();
     const label = WEEKDAY[plan.day] + ' · ' + plan.title;
     document.title = '今日 · ' + label;
     $('dayTitle').textContent = label;
@@ -920,6 +975,7 @@
 
   function init() {
     stopTimer();
+    override = loadOverride();
     applyPlan();
     done = EX.map(() => false); cycles = EX.map(() => 0); idx = 0; resting = false;
     load();
@@ -927,9 +983,10 @@
     render();
   }
 
-  // 过凌晨0点自动切换到新一天：轮询 + 切回前台时立即校正
-  setInterval(() => { if (new Date().toDateString() !== dayStamp) init(); }, 30000);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && new Date().toDateString() !== dayStamp) init(); });
+  // 过凌晨0点自动切换到新一天（按真实日历日判断，手动选定会在此时自动失效回到自动）
+  setInterval(() => { if (new Date().toDateString() !== realStamp) init(); }, 30000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && new Date().toDateString() !== realStamp) init(); });
 
+  buildDaySwitch();
   init();
 </script>
