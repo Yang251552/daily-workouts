@@ -679,17 +679,17 @@
   const A = 'assets/workout-illustrations/';
   // 训练动作库（art/url/vt 来自 exercises.db，targets 取每个动作最相关的 1–3 个）
   const LIB = {
-    squat:    { name: '深蹲',        targets: ['大腿前侧', '臀部'],     art: A + 'deep-squat.png',              url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
-    sumo:     { name: '相扑深蹲',    targets: ['臀部', '大腿后侧'],     art: A + 'sumo-squat.png',              url: 'https://www.bilibili.com/video/BV1GY411F7mE', vt: '一对哑铃8个动作，在家练遍全身肌肉+燃掉脂肪！' },
-    press:    { name: '哑铃推举',    targets: ['三角肌', '三头肌'],     art: A + 'dumbbell-overhead-press.png', url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    squat:    { name: '深蹲',        targets: ['大腿前侧', '臀部'],     art: A + 'deep-squat.png',              url: 'https://www.bilibili.com/video/BV1uZ4y1w74a', vt: '深蹲伤膝盖和腰？这5个错误永远不要犯！' },
+    sumo:     { name: '相扑深蹲',    targets: ['臀部', '大腿后侧'],     art: A + 'sumo-squat.png',              url: 'https://www.bilibili.com/video/BV1uZ4y1w74a', vt: '深蹲伤膝盖和腰？这5个错误永远不要犯！（含相扑深蹲）' },
+    press:    { name: '哑铃推举',    targets: ['三角肌', '三头肌'],     art: A + 'dumbbell-overhead-press.png', url: 'https://www.bilibili.com/video/BV1m44y1N7mk', vt: '练出更宽的肩膀，拯救小骨架（一对哑铃在家练）' },
     leanpush: { name: '前倾俯卧撑',  targets: ['三角肌前束', '三头肌'], art: A + 'forward-leaning-push-up.png', url: 'https://www.bilibili.com/video/BV17h411p75Q', vt: '让你肌肉暴涨的5种俯卧撑' },
-    row:      { name: '哑铃俯身划船', targets: ['背阔肌', '肱二头肌'], art: A + 'dumbbell-bent-over-row.png',  url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
-    curl:     { name: '哑铃弯举',    targets: ['肱二头肌'],             art: A + 'dumbbell-bicep-curl.png',     url: 'https://www.bilibili.com/video/BV17x4y1b7A8', vt: '练小臂用3个技巧，摆脱细弱，迅速增粗！' },
+    row:      { name: '哑铃俯身划船', targets: ['背阔肌', '肱二头肌'], art: A + 'dumbbell-bent-over-row.png',  url: 'https://www.bilibili.com/video/BV1HY4y1A7ga', vt: '练出更宽的背部，不做瘦竹竿（哑铃家练）' },
+    curl:     { name: '哑铃弯举',    targets: ['肱二头肌'],             art: A + 'dumbbell-bicep-curl.png',     url: 'https://www.bilibili.com/video/BV1h14y1Q7x1', vt: '细弱手臂快速增粗，用3个技巧（仅需哑铃）' },
     pushup:   { name: '标准俯卧撑',  targets: ['胸肌', '肩膀', '三头肌'], art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV17F411u7Yx', vt: '俯卧撑少了这5个技巧，肌肉很难增长' },
     pushup2:  { name: '俯卧撑',      targets: ['胸肌', '肩膀', '三头肌'], art: A + 'standard-push-up.png',        url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
-    crunch:   { name: '卷腹',        targets: ['核心'],                 art: A + 'crunch.png',                  url: 'https://www.bilibili.com/video/BV1644y1i7fc', vt: '腰间的肉不好看，该如何锻炼才有型？' },
-    plank:    { name: '平板支撑',    targets: ['核心', '肩膀'],         art: A + 'plank.png',                   url: 'https://www.bilibili.com/video/BV16e4y1p7ji', vt: '这个练习，能让俯卧撑数量飞速提升!' },
-    deadlift: { name: '哑铃硬拉',    targets: ['臀部', '大腿后侧', '背部'], art: A + 'dumbbell-deadlift.png',       url: 'https://www.bilibili.com/video/BV14B4y1176U', vt: '最糟糕的8个哑铃动作，永远不要这样练！' },
+    crunch:   { name: '卷腹',        targets: ['核心'],                 art: A + 'crunch.png',                  url: 'https://www.bilibili.com/video/BV1Sj411t7jB', vt: '这3个错误，让你一直练不好腹肌！' },
+    plank:    { name: '平板支撑',    targets: ['核心', '肩膀'],         art: A + 'plank.png',                   url: 'https://www.bilibili.com/video/BV1Uq4y1K7H6', vt: '核心轰炸训练丨快速提升核心力量！' },
+    deadlift: { name: '哑铃硬拉',    targets: ['臀部', '大腿后侧', '背部'], art: A + 'dumbbell-deadlift.png',       url: 'https://www.bilibili.com/video/BV17w411N7hz', vt: '不练这里，所有体态问题都难解决!（强化根基）' },
     sldl:     { name: '单腿硬拉',    targets: ['臀部', '大腿后侧'],     art: A + 'single-leg-deadlift.png',     url: 'https://www.bilibili.com/video/BV17w411N7hz', vt: '不练这里，所有体态问题都难解决!（强化根基）' },
   };
   // 唤醒日固定动作（只有猫牛式配教程视频）
@@ -697,7 +697,7 @@
     { name: '原地踏步',   targets: ['髋部', '大腿前侧'], reps: '1 分钟', art: A + 'march-in-place.png' },
     { name: '肩绕环',     targets: ['肩关节', '上背'],   reps: '10 次',  art: A + 'shoulder-circles.png' },
     { name: '髋关节绕环', targets: ['髋部'],             reps: '10 次',  art: A + 'hip-circles.png' },
-    { name: '徒手深蹲',   targets: ['大腿前侧', '臀部'], reps: '10 次',  art: A + 'deep-squat.png' },
+    { name: '徒手深蹲',   targets: ['大腿前侧', '臀部'], reps: '10 次',  art: A + 'deep-squat.png', url: 'https://www.bilibili.com/video/BV1uZ4y1w74a', vt: '深蹲伤膝盖和腰？这5个错误永远不要犯！' },
     { name: '猫牛式',     targets: ['脊柱', '核心'],     reps: '8 次',   art: A + 'cat-cow.png', url: 'https://www.bilibili.com/video/BV1dd4y1N7RM', vt: '猫牛式 | 伸展脊柱 缓解腰背痛 新人必看' },
   ];
   // 周日=0 … 周六=6；未列出的天 = 身体唤醒日（周二/四/六/日）
