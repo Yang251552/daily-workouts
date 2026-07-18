@@ -690,7 +690,7 @@
 
 <script>
   // 每日自动切换：按本地日期 new Date().getDay() 选当天计划，过凌晨0点即切换（见 weekly_plan.md）。
-  // 训练日（周一/三/五）动作取自 exercises.db；唤醒日（周二/四/六/日）为固定 5 动作。
+  // 训练日（周一~周五）动作取自 exercises.db；唤醒日（周六/日）为固定 5 动作。
   const A = 'assets/workout-illustrations/';
   // 训练动作库（art/url/vt 来自 exercises.db，targets 取每个动作最相关的 1–3 个）
   const LIB = {
@@ -715,12 +715,16 @@
     { name: '徒手深蹲',   targets: ['大腿前侧', '臀部'], reps: '10 次',  art: A + 'deep-squat.png', url: 'https://www.bilibili.com/video/BV1uZ4y1w74a', vt: '深蹲伤膝盖和腰？这5个错误永远不要犯！' },
     { name: '猫牛式',     targets: ['脊柱', '核心'],     reps: '8 次',   art: A + 'cat-cow.png', url: 'https://www.bilibili.com/video/BV1dd4y1N7RM', vt: '猫牛式 | 伸展脊柱 缓解腰背痛 新人必看' },
   ];
-  // 周日=0 … 周六=6；未列出的天 = 身体唤醒日（周二/四/六/日）
+  // 周日=0 … 周六=6；未列出的天（周六/日）= 身体唤醒日
   const PLAN = {
     1: { title: '深蹲 + 推 + 核心', ex: ['squat', 'sumo', 'pushup', 'pushup2', 'crunch', 'plank'] },
     3: { title: '硬拉 + 拉 + 核心', ex: ['deadlift', 'sldl', 'row', 'curl', 'crunch', 'plank'] },
     5: { title: '深蹲 + 肩推 + 拉', ex: ['squat', 'sumo', 'press', 'leanpush', 'row', 'curl'] },
   };
+  // 学动作阶段：周二/四不引入新动作，直接复用已有训练日（同套动作 + 同教程视频）。
+  // 均衡版：深蹲 3 天（一/二/五）、硬拉 2 天（三/四），五大模式练得更匀。
+  PLAN[2] = PLAN[5];   // 周二 = 周五
+  PLAN[4] = PLAN[3];   // 周四 = 周三
   const WEEKDAY = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
   const TAG_ASSET = {
     '胸肌': 'chest', '上胸': 'chest', '单侧胸肌': 'chest',
@@ -784,7 +788,7 @@
   }
 
   const daySwitch = $('daySwitch');
-  const SWITCH_DAYS = [1, 2, 3, 4, 5];   // 周一~周五（覆盖全部 3 训练日 + 2 唤醒日）
+  const SWITCH_DAYS = [1, 2, 3, 4, 5, 6, 0];   // 周一~周日（5 训练日 + 2 唤醒日，整周可切换）
   function buildDaySwitch() {
     daySwitch.innerHTML = '';
     const mk = (label, val) => {
